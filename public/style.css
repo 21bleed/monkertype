@@ -1,0 +1,74 @@
+body {
+  background: #0f1720;
+  color: #e6eef6;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding: 28px;
+  outline: none;
+}
+
+.card {
+  margin-bottom: 20px;
+}
+
+.correct {
+  color: #6ee7b7;
+}
+
+.wrong {
+  color: #ff9aa2;
+  animation: shake 0.12s;
+}
+
+/* text container for word-based rendering */
+.text-container {
+  margin: 20px 0;
+  padding: 18px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.text-inner {
+  display: inline-block;
+  font-size: 28px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.word {
+  display: inline-block;
+  margin-right: 0.1em;
+}
+
+.char {
+  display: inline-block;
+  white-space: pre;
+}
+
+.caret-element {
+  position: absolute;
+  top: 12px; /* adjusted by JS height set */
+  width: 2px;
+  background: #e6eef6;
+  transform: translateX(0);
+  transition: none;
+  pointer-events: none;
+}
+
+.caret-marker {
+  /* marker for where caret should be placed; no visual by itself */
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  50% { transform: translateX(1px); }
+  75% { transform: translateX(-1px); }
+  100% { transform: translateX(0); }
+}

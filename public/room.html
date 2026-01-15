@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Typing Room</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body tabindex="0">
+
+<h2 id="roomTitle"></h2>
+<h3 id="players"></h3>
+<h2 id="countdown"></h2>
+
+<div id="text" class="text-container">
+  <div id="textInner" class="text-inner"></div>
+  <div id="caret" class="caret-element" aria-hidden="true"></div>
+</div>
+
+<div id="stats"></div>
+<button id="start">Start Race</button>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/room.js"></script>
+</body>
+</html>
