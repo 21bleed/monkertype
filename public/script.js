@@ -20,6 +20,8 @@ let typed = [];
 let caretTargetX = 0;
 let caretX = 0;
 let caretRAF = null;
+let caretTargetY = 0;
+let caretY = 0;
 
 joinBtn.onclick = () => {
   roomCode = roomInput.value || "public";
@@ -116,6 +118,7 @@ function updateCaretTarget() {
     const parentRect = textInner.getBoundingClientRect();
     const mRect = marker.getBoundingClientRect();
     caretTargetX = mRect.left - parentRect.left;
+    caretTargetY = mRect.top - parentRect.top;
     caretEl.style.height = mRect.height + 'px';
   } else {
     const last = textInner.querySelector('.char:last-child');
@@ -123,6 +126,7 @@ function updateCaretTarget() {
       const parentRect = textInner.getBoundingClientRect();
       const mRect = last.getBoundingClientRect();
       caretTargetX = (mRect.right - parentRect.left) + 2;
+      caretTargetY = mRect.top - parentRect.top;
       caretEl.style.height = mRect.height + 'px';
     }
   }
@@ -135,7 +139,8 @@ function startCaretLoop() {
   const loop = () => {
     // snappier caret lerp to feel closer to Monkeytype
     caretX += (caretTargetX - caretX) * 0.28;
-    caretEl.style.transform = `translateX(${caretX}px)`;
+    caretY += (caretTargetY - caretY) * 0.28;
+    caretEl.style.transform = `translate(${caretX}px, ${caretY}px)`;
     caretRAF = requestAnimationFrame(loop);
   };
   loop();

@@ -55,12 +55,13 @@ body {
 
 .caret-element {
   position: absolute;
-  top: 12px; /* adjusted by JS height set */
+  top: 0; /* positioned via transform */
   left: 0;
   width: 2px;
   background: #e6eef6;
   box-shadow: 0 0 6px rgba(230,238,246,0.6);
-  transform: translateX(0);
+  transform: translate(0,0);
+  transform-origin: 0 0;
   transition: none;
   pointer-events: none;
 }
@@ -71,7 +72,8 @@ body {
   width: 2px;
   background: transparent;
   pointer-events: none;
-  transform: translateX(0);
+  transform: translate(0,0);
+  transform-origin: 0 0;
   left: 0;
 }
 

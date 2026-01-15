@@ -21,6 +21,8 @@ let typed = [];
 let caretTargetX = 0;
 let caretX = 0;
 let caretRAF = null;
+let caretTargetY = 0;
+let caretY = 0;
 
 // opponent cursor elements map
 const opponentCursors = new Map();
@@ -128,6 +130,7 @@ function updateCaretTarget() {
     const parentRect = textInner.getBoundingClientRect();
     const mRect = marker.getBoundingClientRect();
     caretTargetX = mRect.left - parentRect.left;
+    caretTargetY = mRect.top - parentRect.top;
     caretEl.style.height = mRect.height + 'px';
   } else {
     // if beyond end, place caret at end
@@ -136,6 +139,7 @@ function updateCaretTarget() {
       const parentRect = textInner.getBoundingClientRect();
       const mRect = last.getBoundingClientRect();
       caretTargetX = (mRect.right - parentRect.left) + 2;
+      caretTargetY = mRect.top - parentRect.top;
       caretEl.style.height = mRect.height + 'px';
     }
   }
@@ -147,7 +151,8 @@ function startCaretLoop() {
   const loop = () => {
     // slightly snappier lerp for a Monkeytype-like feel
     caretX += (caretTargetX - caretX) * 0.28; // lerp factor
-    caretEl.style.transform = `translateX(${caretX}px)`;
+    caretY += (caretTargetY - caretY) * 0.28;
+    caretEl.style.transform = `translate(${caretX}px, ${caretY}px)`;
     caretRAF = requestAnimationFrame(loop);
   };
   loop();
@@ -191,23 +196,28 @@ function updateOpponentCursors(room) {
     const idx = Math.max(0, Math.min((p.chars || 0), text.length));
     const marker = textInner.querySelector('.char[data-index="' + idx + '"]');
     let targetX = 0;
+    let targetY = 0;
     if (marker) {
       const parentRect = textInner.getBoundingClientRect();
       const mRect = marker.getBoundingClientRect();
       targetX = mRect.left - parentRect.left;
+      targetY = mRect.top - parentRect.top;
     } else {
       const last = textInner.querySelector('.char:last-child');
       if (last) {
         const parentRect = textInner.getBoundingClientRect();
         const mRect = last.getBoundingClientRect();
         targetX = (mRect.right - parentRect.left) + 2;
+        targetY = mRect.top - parentRect.top;
       }
     }
     entry.targetX = targetX;
+    entry.targetY = targetY;
     entry.label.textContent = p.username || 'player';
     // apply simple lerp for the opponent cursor
     entry.x += (entry.targetX - entry.x) * 0.18;
-    entry.el.style.transform = `translateX(${entry.x}px)`;
+    entry.y = (entry.y || 0) + ((entry.targetY || 0) - (entry.y || 0)) * 0.18;
+    entry.el.style.transform = `translate(${entry.x}px, ${entry.y}px)`;
     // position label centered above cursor
     entry.label.style.left = `${entry.x}px`;
   }
