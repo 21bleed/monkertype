@@ -123,18 +123,16 @@ function updateCaretTarget() {
   } else {
     const last = textInner.querySelector('.char:last-child');
     if (last) {
-      const parentRect = textInner.getBoundingClientRect();
-      const mRect = last.getBoundingClientRect();
-      caretTargetX = (mRect.right - parentRect.left) + 2;
-      caretTargetY = mRect.top - parentRect.top;
-      caretEl.style.height = mRect.height + 'px';
+      // use offsets so caret stays aligned with wrapped lines
+      caretTargetX = marker.offsetLeft;
+      caretTargetY = marker.offsetTop;
+      caretEl.style.height = marker.offsetHeight + 'px';
     }
   }
 }
-
-function startCaretLoop() {
-  if (caretRAF) cancelAnimationFrame(caretRAF);
-  const caretEl = document.getElementById('caret');
+        caretTargetX = last.offsetLeft + last.offsetWidth + 2;
+        caretTargetY = last.offsetTop;
+        caretEl.style.height = last.offsetHeight + 'px';
   if (!caretEl) return;
   const loop = () => {
     // snappier caret lerp to feel closer to Monkeytype

@@ -126,21 +126,18 @@ function updateCaretTarget() {
   const marker = textInner.querySelector('.char[data-index="' + cursor + '"]');
 
   if (marker) {
-    // compute caret X relative to textInner
-    const parentRect = textInner.getBoundingClientRect();
-    const mRect = marker.getBoundingClientRect();
-    caretTargetX = mRect.left - parentRect.left;
-    caretTargetY = mRect.top - parentRect.top;
-    caretEl.style.height = mRect.height + 'px';
+    // compute caret X/Y relative to textInner using offsets (more stable with wrapping)
+    caretTargetX = marker.offsetLeft;
+    caretTargetY = marker.offsetTop;
+    caretEl.style.height = marker.offsetHeight + 'px';
   } else {
     // if beyond end, place caret at end
     const last = textInner.querySelector('.char:last-child');
     if (last) {
-      const parentRect = textInner.getBoundingClientRect();
-      const mRect = last.getBoundingClientRect();
-      caretTargetX = (mRect.right - parentRect.left) + 2;
-      caretTargetY = mRect.top - parentRect.top;
-      caretEl.style.height = mRect.height + 'px';
+      // place caret after the last character
+      caretTargetX = last.offsetLeft + last.offsetWidth + 2;
+      caretTargetY = last.offsetTop;
+      caretEl.style.height = last.offsetHeight + 'px';
     }
   }
 }
