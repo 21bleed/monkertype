@@ -161,10 +161,15 @@ function ensureOpponentCursor(id, username) {
   const el = document.createElement('div');
   el.className = 'opponent-cursor';
   el.style.color = colorForId(id);
-
   const bar = document.createElement('div');
   bar.className = 'bar';
   el.appendChild(bar);
+
+  // small badge with initial
+  const badge = document.createElement('div');
+  badge.className = 'opponent-badge';
+  badge.textContent = (username || 'P').charAt(0).toUpperCase();
+  el.appendChild(badge);
 
   const label = document.createElement('div');
   label.className = 'opponent-label';
@@ -239,3 +244,54 @@ socket.on("roomUpdate", room => {
 
   stats.textContent = `WPM: ${wpm} | Accuracy: ${acc.toFixed(1)}%`;
 });
+
+socket.on('raceEnd', winner => {
+  showWinnerOverlay(winner);
+});
+
+function showWinnerOverlay(winner) {
+  // create overlay
+  let existing = document.getElementById('winOverlay');
+  if (existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'winOverlay';
+  overlay.className = 'win-overlay';
+
+  const card = document.createElement('div');
+  card.className = 'winner-card';
+
+  const badge = document.createElement('div');
+  badge.className = 'winner-badge';
+  badge.textContent = (winner.username || 'P').charAt(0).toUpperCase();
+  card.appendChild(badge);
+
+  const title = document.createElement('div');
+  title.className = 'winner-title';
+  title.textContent = winner.id === socket.id ? 'You finished first!' : `${winner.username} finished first!`;
+  card.appendChild(title);
+
+  const sub = document.createElement('div');
+  sub.className = 'winner-sub';
+  const seconds = ((winner.timeMs || 0) / 1000).toFixed(2);
+  sub.textContent = `Time: ${seconds}s — Errors: ${winner.errors || 0}`;
+  card.appendChild(sub);
+
+  overlay.appendChild(card);
+  document.body.appendChild(overlay);
+
+  // small confetti burst
+  for (let i = 0; i < 24; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = (50 + (Math.random() - 0.5) * 40) + '%';
+    c.style.background = `hsl(${Math.floor(Math.random()*360)} 70% 60%)`;
+    overlay.appendChild(c);
+    setTimeout(() => c.remove(), 2500);
+  }
+
+  // auto remove after a while
+  setTimeout(() => {
+    overlay.classList.add('win-fade');
+    setTimeout(() => overlay.remove(), 1000);
+  }, 4200);
+}

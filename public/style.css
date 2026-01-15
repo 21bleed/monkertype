@@ -97,6 +97,77 @@ body {
   left: 0;
 }
 
+/* small circular badge for opponent initial */
+.opponent-badge {
+  position: absolute;
+  top: -8px;
+  left: -10px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #072;
+  font-weight: 700;
+  font-size: 12px;
+  background: currentColor;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  transform: translateX(-50%);
+}
+
+/* winner overlay */
+.win-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.winner-card {
+  pointer-events: auto;
+  background: rgba(8,10,15,0.95);
+  color: #fff;
+  padding: 22px 28px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+}
+
+.winner-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #f59e0b;
+  color: #08102a;
+  font-weight: 800;
+  font-size: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.winner-title { font-size: 20px; font-weight:700; margin-bottom:6px }
+.winner-sub { font-size: 13px; color: #d1d5db }
+
+.confetti {
+  position: absolute;
+  top: 10%;
+  width: 8px;
+  height: 14px;
+  opacity: 0.95;
+  transform: translateY(0) rotate(0);
+  animation: confetti-fall 2400ms linear forwards;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-10vh) rotate(0) }
+  100% { transform: translateY(80vh) rotate(720deg); opacity: 0 }
+}
+
 
 @keyframes blink {
   50% { opacity: 0; }

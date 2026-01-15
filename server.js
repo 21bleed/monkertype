@@ -165,6 +165,21 @@ io.on("connection", socket => {
     player.chars = chars;
     player.errors = errors;
 
+    // If this player finished and room has no winner yet, mark winner
+    const room = rooms[roomId];
+    if (!room.finished && player.chars >= (room.text || '').length) {
+      room.finished = true;
+      player.finishTime = Date.now();
+      const winner = {
+        id: socket.id,
+        username: player.username,
+        timeMs: player.finishTime - player.startTime,
+        chars: player.chars,
+        errors: player.errors
+      };
+      io.to(roomId).emit('raceEnd', winner);
+    }
+
     io.to(roomId).emit("roomUpdate", rooms[roomId]);
   });
 
