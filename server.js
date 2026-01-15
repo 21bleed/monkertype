@@ -13,17 +13,53 @@ app.get("/room/:id", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "room.html"));
 });
 
-// A simple word bank for race generation (common words)
+// A larger word bank for race generation (common words)
 const WORDS = (`the be to of and a in that have I it for not on with he as you do at
 this but his by from they we say her she or an will my one all would there their
 what so up out if about who get which go me when make can like time no just him
 know take people into year your good some could them see other than then now look
 only come its over think also back after use two how our work first well way even
-new want because any these give day most us`).split(/\s+/);
+new want because any these give day most us are were been has more some many
+example sample typing test practice random words lorem ipsum quick brown fox jumps
+over lazy dog keyboard fast accuracy speed precision challenge focus rhythm steady
+garden ocean mountain river sky cloud moon sun star light dark pixel color sound
+space time motion code script game play pause resume start end finish level high
+score rank medal badge trophy friend rival teammate join leave host guest room
+alpha beta gamma delta epsilon omega zeta eta theta iota kappa lambda mu nu xi
+omicron pi rho sigma tau upsilon phi chi psi omega`).split(/\s+/);
 
-function generateText(wordCount = 50) {
+// A few short sentence templates to generate sentence-mode text
+const SENTENCE_TEMPLATES = [
+  "The quick brown fox jumps over the lazy dog.",
+  "Practice makes progress and speed follows accuracy.",
+  "Typing tests help you focus on rhythm and precision.",
+  "Keep your hands relaxed and eyes on the screen.",
+  "Short sprints build speed; long runs build endurance." 
+];
+
+function generateText(count = 50, mode = 'words') {
+  if (mode === 'sentences') {
+    // generate `count` sentences by sampling templates and mixing words
+    const sentences = [];
+    for (let s = 0; s < count; s++) {
+      // pick a template and optionally shuffle/add words
+      let tpl = SENTENCE_TEMPLATES[Math.floor(Math.random() * SENTENCE_TEMPLATES.length)];
+      // optionally append a short random clause
+      if (Math.random() < 0.35) {
+        tpl = tpl.replace(/\.$/, '');
+        const extraWords = [];
+        const extraCount = 3 + Math.floor(Math.random() * 6);
+        for (let i = 0; i < extraCount; i++) extraWords.push(WORDS[Math.floor(Math.random() * WORDS.length)]);
+        tpl = tpl + ' ' + extraWords.join(' ') + '.';
+      }
+      sentences.push(tpl);
+    }
+    return sentences.join(' ');
+  }
+
+  // default: words mode
   const out = [];
-  for (let i = 0; i < wordCount; i++) {
+  for (let i = 0; i < count; i++) {
     const w = WORDS[Math.floor(Math.random() * WORDS.length)];
     out.push(w);
   }

@@ -38,11 +38,11 @@ function colorForId(id) {
 
 socket.emit("joinRoom", { roomId, username });
 
-startBtn.onclick = () => socket.emit("startRace");
-// when clicking start, include chosen options (word count)
+// when clicking start, include chosen options (word count + mode)
 startBtn.onclick = () => {
   const count = parseInt(document.getElementById('wordCount')?.value, 10) || 50;
-  socket.emit('startRace', { count });
+  const mode = document.getElementById('modeSelect')?.value || 'words';
+  socket.emit('startRace', { count, mode });
 };
 
 socket.on("countdown", n => {
