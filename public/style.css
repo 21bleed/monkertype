@@ -52,6 +52,7 @@ body {
 .caret-element {
   position: absolute;
   top: 12px; /* adjusted by JS height set */
+  left: 0;
   width: 2px;
   background: #e6eef6;
   box-shadow: 0 0 6px rgba(230,238,246,0.6);
@@ -67,6 +68,7 @@ body {
   background: transparent;
   pointer-events: none;
   transform: translateX(0);
+  left: 0;
 }
 
 .opponent-cursor .bar {
@@ -78,7 +80,7 @@ body {
 
 .opponent-label {
   position: absolute;
-  transform: translateY(-140%);
+  transform: translate(-50%, -140%);
   background: rgba(0,0,0,0.6);
   color: #fff;
   padding: 2px 8px;
@@ -86,6 +88,7 @@ body {
   font-size: 12px;
   white-space: nowrap;
   pointer-events: none;
+  left: 0;
 }
 
 .caret-marker {

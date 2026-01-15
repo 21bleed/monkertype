@@ -203,8 +203,8 @@ function updateOpponentCursors(room) {
     // apply simple lerp for the opponent cursor
     entry.x += (entry.targetX - entry.x) * 0.18;
     entry.el.style.transform = `translateX(${entry.x}px)`;
-    // position label slightly above
-    entry.label.style.left = '6px';
+    // position label centered above cursor
+    entry.label.style.left = `${entry.x}px`;
   }
 }
 
