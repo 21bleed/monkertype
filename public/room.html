@@ -10,9 +10,17 @@
 <h3 id="players"></h3>
 <h2 id="countdown"></h2>
 
+<div class="card">
+  <label>Mode: <select id="modeSelect">
+    <option value="words">Words</option>
+  </select></label>
+  <label>Count: <input id="wordCount" type="number" value="50" min="5" max="200" style="width:80px"/></label>
+</div>
+
 <div id="text" class="text-container">
   <div id="textInner" class="text-inner"></div>
   <div id="caret" class="caret-element" aria-hidden="true"></div>
+  <!-- opponent cursors appended here -->
 </div>
 
 <div id="stats"></div>

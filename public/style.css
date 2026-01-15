@@ -47,6 +47,10 @@ body {
 .char {
   display: inline-block;
   white-space: pre;
+  font-family: inherit;
+  font-variant-ligatures: none;
+  -webkit-font-variant-ligatures: none;
+  vertical-align: bottom;
 }
 
 .caret-element {
@@ -91,9 +95,6 @@ body {
   left: 0;
 }
 
-.caret-marker {
-  /* marker for where caret should be placed; no visual by itself */
-}
 
 @keyframes blink {
   50% { opacity: 0; }
