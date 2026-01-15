@@ -22,6 +22,20 @@ let caretTargetX = 0;
 let caretX = 0;
 let caretRAF = null;
 
+// opponent cursor elements map
+const opponentCursors = new Map();
+const colorMap = {};
+
+function colorForId(id) {
+  if (colorMap[id]) return colorMap[id];
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0;
+  const hue = Math.abs(h) % 360;
+  const color = `hsl(${hue} 70% 62%)`;
+  colorMap[id] = color;
+  return color;
+}
+
 socket.emit("joinRoom", { roomId, username });
 
 startBtn.onclick = () => socket.emit("startRace");
@@ -126,14 +140,77 @@ function startCaretLoop() {
   if (caretRAF) cancelAnimationFrame(caretRAF);
   const caretEl = document.getElementById('caret');
   const loop = () => {
-    caretX += (caretTargetX - caretX) * 0.18; // lerp factor
+    // slightly snappier lerp for a Monkeytype-like feel
+    caretX += (caretTargetX - caretX) * 0.28; // lerp factor
     caretEl.style.transform = `translateX(${caretX}px)`;
     caretRAF = requestAnimationFrame(loop);
   };
   loop();
 }
 
+function ensureOpponentCursor(id, username) {
+  if (opponentCursors.has(id)) return opponentCursors.get(id);
+  const container = document.getElementById('text');
+  const el = document.createElement('div');
+  el.className = 'opponent-cursor';
+  el.style.color = colorForId(id);
+
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+  el.appendChild(bar);
+
+  const label = document.createElement('div');
+  label.className = 'opponent-label';
+  label.textContent = username || 'player';
+  el.appendChild(label);
+
+  container.appendChild(el);
+  opponentCursors.set(id, { el, bar, label, x: 0, targetX: 0 });
+  return opponentCursors.get(id);
+}
+
+function updateOpponentCursors(room) {
+  const textInner = document.getElementById('textInner');
+  // remove ones no longer in room
+  for (const id of Array.from(opponentCursors.keys())) {
+    if (!room.players[id]) {
+      const entry = opponentCursors.get(id);
+      entry.el.remove();
+      opponentCursors.delete(id);
+    }
+  }
+
+  for (const [id, p] of Object.entries(room.players)) {
+    if (id === socket.id) continue;
+    const entry = ensureOpponentCursor(id, p.username);
+    const idx = Math.max(0, Math.min((p.chars || 0), text.length));
+    const marker = textInner.querySelector('.char[data-index="' + idx + '"]');
+    let targetX = 0;
+    if (marker) {
+      const parentRect = textInner.getBoundingClientRect();
+      const mRect = marker.getBoundingClientRect();
+      targetX = mRect.left - parentRect.left;
+    } else {
+      const last = textInner.querySelector('.char:last-child');
+      if (last) {
+        const parentRect = textInner.getBoundingClientRect();
+        const mRect = last.getBoundingClientRect();
+        targetX = (mRect.right - parentRect.left) + 2;
+      }
+    }
+    entry.targetX = targetX;
+    entry.label.textContent = p.username || 'player';
+    // apply simple lerp for the opponent cursor
+    entry.x += (entry.targetX - entry.x) * 0.18;
+    entry.el.style.transform = `translateX(${entry.x}px)`;
+    // position label slightly above
+    entry.label.style.left = '6px';
+  }
+}
+
 socket.on("roomUpdate", room => {
+  // update opponent cursors first
+  try { updateOpponentCursors(room); } catch (e) { /* ignore during initial render */ }
   playersEl.textContent = Object.values(room.players)
     .map(p => p.username)
     .join(" • ");

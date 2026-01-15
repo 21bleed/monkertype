@@ -133,7 +133,8 @@ function startCaretLoop() {
   const caretEl = document.getElementById('caret');
   if (!caretEl) return;
   const loop = () => {
-    caretX += (caretTargetX - caretX) * 0.18;
+    // snappier caret lerp to feel closer to Monkeytype
+    caretX += (caretTargetX - caretX) * 0.28;
     caretEl.style.transform = `translateX(${caretX}px)`;
     caretRAF = requestAnimationFrame(loop);
   };

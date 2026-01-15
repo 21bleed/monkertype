@@ -31,10 +31,12 @@ body {
 
 .text-inner {
   display: inline-block;
-  font-size: 28px;
-  line-height: 1.4;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Segoe UI Mono", monospace;
+  font-size: 34px;
+  line-height: 1.2;
   white-space: pre-wrap;
   word-break: break-word;
+  letter-spacing: 0.2px;
 }
 
 .word {
@@ -52,8 +54,37 @@ body {
   top: 12px; /* adjusted by JS height set */
   width: 2px;
   background: #e6eef6;
+  box-shadow: 0 0 6px rgba(230,238,246,0.6);
   transform: translateX(0);
   transition: none;
+  pointer-events: none;
+}
+
+/* opponent cursor visuals */
+.opponent-cursor {
+  position: absolute;
+  width: 2px;
+  background: transparent;
+  pointer-events: none;
+  transform: translateX(0);
+}
+
+.opponent-cursor .bar {
+  width: 2px;
+  height: 28px;
+  background: currentColor;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.opponent-label {
+  position: absolute;
+  transform: translateY(-140%);
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  white-space: nowrap;
   pointer-events: none;
 }
 
