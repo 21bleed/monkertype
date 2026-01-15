@@ -28,36 +28,64 @@ score rank medal badge trophy friend rival teammate join leave host guest room
 alpha beta gamma delta epsilon omega zeta eta theta iota kappa lambda mu nu xi
 omicron pi rho sigma tau upsilon phi chi psi omega`).split(/\s+/);
 
-// A few short sentence templates to generate sentence-mode text
-const SENTENCE_TEMPLATES = [
+// A curated sentence bank (short quotes and neutral sentences)
+const SENTENCES = [
   "The quick brown fox jumps over the lazy dog.",
   "Practice makes progress and speed follows accuracy.",
   "Typing tests help you focus on rhythm and precision.",
   "Keep your hands relaxed and eyes on the screen.",
-  "Short sprints build speed; long runs build endurance." 
+  "Short sprints build speed; long runs build endurance.",
+  "Simplicity is the soul of efficiency.",
+  "Clear thinking requires clear language.",
+  "Good code is its own documentation.",
+  "The best way to get started is to begin.",
+  "Small consistent improvements compound over time.",
+  "Focus on accuracy first, speed will follow.",
+  "Breathe steadily and let your rhythm guide you.",
+  "Measure progress, then adjust your practice.",
+  "Errors are information; learn from each one.",
+  "Short breaks can improve long-term concentration.",
+  "Practice without pressure builds true speed.",
+  "Typing is a conversation between hands and brain.",
+  "Consistency beats intensity in the long run.",
+  "A steady pace often outlasts a frantic burst.",
+  "Confidence grows when you focus on fundamentals.",
+  "Readability is as important as performance.",
+  "A calm mind produces cleaner output.",
+  "The only way out is through practiced repetition.",
+  "Keep challenging yourself with slightly harder tests.",
+  "Curiosity leads to new skills and better habits.",
+  "Precision now saves frustration later.",
+  "Learn the patterns, not just the letters.",
+  "Every practice session moves you forward.",
+  "Track your progress, celebrate small wins.",
+  "The keyboard rewards patience and persistence."
 ];
 
 function generateText(count = 50, mode = 'words') {
   if (mode === 'sentences') {
-    // generate `count` sentences by sampling templates and mixing words
+    // `count` is the number of sentences requested.
     const sentences = [];
-    for (let s = 0; s < count; s++) {
-      // pick a template and optionally shuffle/add words
-      let tpl = SENTENCE_TEMPLATES[Math.floor(Math.random() * SENTENCE_TEMPLATES.length)];
-      // optionally append a short random clause
+    while (sentences.length < count) {
+      // sample a curated sentence
+      let s = SENTENCES[Math.floor(Math.random() * SENTENCES.length)];
+      // sometimes append a short random clause for variety (adds commas)
       if (Math.random() < 0.35) {
-        tpl = tpl.replace(/\.$/, '');
-        const extraWords = [];
-        const extraCount = 3 + Math.floor(Math.random() * 6);
-        for (let i = 0; i < extraCount; i++) extraWords.push(WORDS[Math.floor(Math.random() * WORDS.length)]);
-        tpl = tpl + ' ' + extraWords.join(' ') + '.';
+        const clauseLen = 2 + Math.floor(Math.random() * 5);
+        const clauseWords = [];
+        for (let i = 0; i < clauseLen; i++) clauseWords.push(WORDS[Math.floor(Math.random() * WORDS.length)]);
+        // insert clause before final punctuation
+        s = s.replace(/\.$/, '');
+        // choose comma or semicolon occasionally
+        const sep = Math.random() < 0.12 ? ';' : ',';
+        s = `${s}${sep} ${clauseWords.join(' ')}.`;
       }
-      sentences.push(tpl);
+      sentences.push(s);
     }
     return sentences.join(' ');
   }
 
-  // default: words mode
+  // default: words mode (count = number of words)
   const out = [];
   for (let i = 0; i < count; i++) {
     const w = WORDS[Math.floor(Math.random() * WORDS.length)];
